@@ -1,0 +1,10 @@
+target/
+.venv/
+.tools/
+.m2/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.ipynb_checkpoints/
+__pycache__/

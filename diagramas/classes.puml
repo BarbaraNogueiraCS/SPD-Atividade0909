@@ -1,0 +1,62 @@
+@startuml
+!pragma layout smetana
+title Biblioteca — Diagrama de classes
+hide methods
+skinparam classAttributeIconSize 0
+class Leitor {
+  id: Integer
+  nome: String
+  email: String
+}
+class Carteirinha {
+  id: Integer
+  numero: String
+  emitidaEm: String
+}
+class Livro {
+  id: Integer
+  titulo: String
+  isbn: String
+}
+class Autor {
+  id: Integer
+  nome: String
+}
+class Exemplar {
+  id: Integer
+  codigo: String
+}
+class Emprestimo {
+  id: Integer
+  realizadoEm: String
+  previstoPara: String
+  devolvidoEm: String [opcional]
+}
+Leitor "1" -- "0..1" Carteirinha : possui
+class LivroAutor {
+  id: Integer
+}
+Livro "1" -- "0..*" LivroAutor
+Autor "1" -- "0..*" LivroAutor
+note bottom of LivroAutor
+  Associação N:M entre Livro e Autor.
+  O par (livro, autor) não pode se repetir.
+end note
+Livro "1" -- "0..*" Exemplar : possui
+Leitor "1" -- "0..*" Emprestimo : realiza
+Exemplar "1" -- "0..*" Emprestimo : histórico
+note bottom of Carteirinha
+  Relação 1:1 com participação opcional:
+  um leitor pode aguardar a emissão;
+  cada carteirinha pertence a um leitor.
+end note
+note bottom of Emprestimo
+  Cada empréstimo corresponde a um exemplar.
+  Um exemplar pode ter vários empréstimos históricos,
+  mas somente um empréstimo ativo por vez.
+end note
+legend bottom
+  Datas são String em formato ISO yyyy-MM-dd.
+  As associações representam referências nas classes Java.
+endlegend
+@enduml

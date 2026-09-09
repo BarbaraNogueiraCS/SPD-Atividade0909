@@ -1,0 +1,69 @@
+@startuml
+!pragma layout smetana
+title Biblioteca — Modelo relacional
+hide circle
+skinparam linetype ortho
+entity leitor {
+  * id : INTEGER <<PK>>
+  --
+  * nome : TEXT
+  * email : TEXT <<UNIQUE>>
+}
+entity carteirinha {
+  * id : INTEGER <<PK>>
+  --
+  * leitor_id : INTEGER <<FK, UNIQUE>>
+  * numero : TEXT <<UNIQUE>>
+  * emitida_em : TEXT
+}
+entity livro {
+  * id : INTEGER <<PK>>
+  --
+  * titulo : TEXT
+  * isbn : TEXT <<UNIQUE>>
+}
+entity autor {
+  * id : INTEGER <<PK>>
+  --
+  * nome : TEXT
+}
+entity livro_autor {
+  * id : INTEGER <<PK>>
+  --
+  * livro_id : INTEGER <<FK>>
+  * autor_id : INTEGER <<FK>>
+}
+entity exemplar {
+  * id : INTEGER <<PK>>
+  --
+  * livro_id : INTEGER <<FK>>
+  * codigo : TEXT <<UNIQUE>>
+}
+entity emprestimo {
+  * id : INTEGER <<PK>>
+  --
+  * leitor_id : INTEGER <<FK>>
+  * exemplar_id : INTEGER <<FK>>
+  * realizado_em : TEXT
+  * previsto_para : TEXT
+  devolvido_em : TEXT <<NULL permitido>>
+}
+leitor ||--o| carteirinha
+livro ||--o{ exemplar
+livro ||--o{ livro_autor
+autor ||--o{ livro_autor
+leitor ||--o{ emprestimo
+exemplar ||--o{ emprestimo
+note bottom of emprestimo
+  previsto_para >= realizado_em
+  devolvido_em é NULL ou >= realizado_em
+  exemplar_id único entre empréstimos ativos
+  (devolvido_em IS NULL).
+end note
+legend bottom
+  * = coluna obrigatória (NOT NULL)
+  PK = chave primária; FK = chave estrangeira
+  livro_autor tem UNIQUE(livro_id, autor_id).
+  Datas: texto ISO yyyy-MM-dd.
+endlegend
+@enduml
