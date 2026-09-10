@@ -1,28 +1,33 @@
 package br.edu.biblioteca;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-/** Entidade persistente: emprestimo. Datas usam texto ISO yyyy-MM-dd. */
-@DatabaseTable(tableName = "emprestimo")
+
+/** Entidade mapeada com Jakarta Persistence. */
+@Entity
+@Table(name = "emprestimo")
 public class Emprestimo {
-    @DatabaseField(generatedId = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @DatabaseField(canBeNull = false, columnName = "leitor_id", foreign = true, foreignAutoRefresh = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "leitor_id", nullable = false)
     private Leitor leitor;
 
-    @DatabaseField(canBeNull = false, columnName = "exemplar_id", foreign = true, foreignAutoRefresh = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "exemplar_id", nullable = false)
     private Exemplar exemplar;
 
-    @DatabaseField(canBeNull = false, columnName = "realizado_em")
-    private String realizadoEm;
+    @Column(name = "realizado_em", nullable = false)
+    private LocalDate realizadoEm;
 
-    @DatabaseField(canBeNull = false, columnName = "previsto_para")
-    private String previstoPara;
+    @Column(name = "previsto_para", nullable = false)
+    private LocalDate previstoPara;
 
-    @DatabaseField(canBeNull = true, columnName = "devolvido_em")
-    private String devolvidoEm;
+    @Column(name = "devolvido_em", nullable = true)
+    private LocalDate devolvidoEm;
 
     public Emprestimo() {}
 
@@ -31,10 +36,10 @@ public class Emprestimo {
     public void setLeitor(Leitor leitor) { this.leitor = leitor; }
     public Exemplar getExemplar() { return exemplar; }
     public void setExemplar(Exemplar exemplar) { this.exemplar = exemplar; }
-    public String getRealizadoEm() { return realizadoEm; }
-    public void setRealizadoEm(String realizadoEm) { this.realizadoEm = realizadoEm; }
-    public String getPrevistoPara() { return previstoPara; }
-    public void setPrevistoPara(String previstoPara) { this.previstoPara = previstoPara; }
-    public String getDevolvidoEm() { return devolvidoEm; }
-    public void setDevolvidoEm(String devolvidoEm) { this.devolvidoEm = devolvidoEm; }
+    public LocalDate getRealizadoEm() { return realizadoEm; }
+    public void setRealizadoEm(LocalDate realizadoEm) { this.realizadoEm = realizadoEm; }
+    public LocalDate getPrevistoPara() { return previstoPara; }
+    public void setPrevistoPara(LocalDate previstoPara) { this.previstoPara = previstoPara; }
+    public LocalDate getDevolvidoEm() { return devolvidoEm; }
+    public void setDevolvidoEm(LocalDate devolvidoEm) { this.devolvidoEm = devolvidoEm; }
 }

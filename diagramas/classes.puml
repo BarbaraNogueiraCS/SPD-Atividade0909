@@ -1,6 +1,6 @@
 @startuml
 !pragma layout smetana
-title Biblioteca — Diagrama de classes
+title Biblioteca — Diagrama de classes JPA
 hide methods
 skinparam classAttributeIconSize 0
 class Leitor {
@@ -11,7 +11,7 @@ class Leitor {
 class Carteirinha {
   id: Integer
   numero: String
-  emitidaEm: String
+  emitidaEm: LocalDate
 }
 class Livro {
   id: Integer
@@ -28,9 +28,9 @@ class Exemplar {
 }
 class Emprestimo {
   id: Integer
-  realizadoEm: String
-  previstoPara: String
-  devolvidoEm: String [opcional]
+  realizadoEm: LocalDate
+  previstoPara: LocalDate
+  devolvidoEm: LocalDate [opcional]
 }
 Leitor "1" -- "0..1" Carteirinha : possui
 class LivroAutor {
@@ -56,7 +56,7 @@ note bottom of Emprestimo
   mas somente um empréstimo ativo por vez.
 end note
 legend bottom
-  Datas são String em formato ISO yyyy-MM-dd.
+  Datas são LocalDate, mapeadas para DATE no H2.
   As associações representam referências nas classes Java.
 endlegend
 @enduml

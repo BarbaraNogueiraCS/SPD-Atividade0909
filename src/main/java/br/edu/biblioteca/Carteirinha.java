@@ -1,22 +1,26 @@
 package br.edu.biblioteca;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-/** Entidade persistente: carteirinha. Datas usam texto ISO yyyy-MM-dd. */
-@DatabaseTable(tableName = "carteirinha")
+
+/** Entidade mapeada com Jakarta Persistence. */
+@Entity
+@Table(name = "carteirinha")
 public class Carteirinha {
-    @DatabaseField(generatedId = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @DatabaseField(canBeNull = false, columnName = "leitor_id", foreign = true, foreignAutoRefresh = true, unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "leitor_id", nullable = false, unique = true)
     private Leitor leitor;
 
-    @DatabaseField(canBeNull = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String numero;
 
-    @DatabaseField(canBeNull = false, columnName = "emitida_em")
-    private String emitidaEm;
+    @Column(name = "emitida_em", nullable = false)
+    private LocalDate emitidaEm;
 
     public Carteirinha() {}
 
@@ -25,6 +29,6 @@ public class Carteirinha {
     public void setLeitor(Leitor leitor) { this.leitor = leitor; }
     public String getNumero() { return numero; }
     public void setNumero(String numero) { this.numero = numero; }
-    public String getEmitidaEm() { return emitidaEm; }
-    public void setEmitidaEm(String emitidaEm) { this.emitidaEm = emitidaEm; }
+    public LocalDate getEmitidaEm() { return emitidaEm; }
+    public void setEmitidaEm(LocalDate emitidaEm) { this.emitidaEm = emitidaEm; }
 }

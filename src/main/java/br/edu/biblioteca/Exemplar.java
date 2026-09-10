@@ -1,18 +1,22 @@
 package br.edu.biblioteca;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-/** Entidade persistente: exemplar. Datas usam texto ISO yyyy-MM-dd. */
-@DatabaseTable(tableName = "exemplar")
+
+/** Entidade mapeada com Jakarta Persistence. */
+@Entity
+@Table(name = "exemplar")
 public class Exemplar {
-    @DatabaseField(generatedId = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @DatabaseField(canBeNull = false, columnName = "livro_id", foreign = true, foreignAutoRefresh = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;
 
-    @DatabaseField(canBeNull = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String codigo;
 
     public Exemplar() {}

@@ -1,31 +1,31 @@
 @startuml
 !pragma layout smetana
-title Biblioteca — Modelo relacional
+title Biblioteca — Modelo relacional H2
 hide circle
 skinparam linetype ortho
 entity leitor {
   * id : INTEGER <<PK>>
   --
-  * nome : TEXT
-  * email : TEXT <<UNIQUE>>
+  * nome : VARCHAR(255)
+  * email : VARCHAR(255) <<UNIQUE>>
 }
 entity carteirinha {
   * id : INTEGER <<PK>>
   --
   * leitor_id : INTEGER <<FK, UNIQUE>>
-  * numero : TEXT <<UNIQUE>>
-  * emitida_em : TEXT
+  * numero : VARCHAR(255) <<UNIQUE>>
+  * emitida_em : DATE
 }
 entity livro {
   * id : INTEGER <<PK>>
   --
-  * titulo : TEXT
-  * isbn : TEXT <<UNIQUE>>
+  * titulo : VARCHAR(255)
+  * isbn : VARCHAR(255) <<UNIQUE>>
 }
 entity autor {
   * id : INTEGER <<PK>>
   --
-  * nome : TEXT
+  * nome : VARCHAR(255)
 }
 entity livro_autor {
   * id : INTEGER <<PK>>
@@ -37,16 +37,17 @@ entity exemplar {
   * id : INTEGER <<PK>>
   --
   * livro_id : INTEGER <<FK>>
-  * codigo : TEXT <<UNIQUE>>
+  * codigo : VARCHAR(255) <<UNIQUE>>
 }
 entity emprestimo {
   * id : INTEGER <<PK>>
   --
   * leitor_id : INTEGER <<FK>>
   * exemplar_id : INTEGER <<FK>>
-  * realizado_em : TEXT
-  * previsto_para : TEXT
-  devolvido_em : TEXT <<NULL permitido>>
+  * realizado_em : DATE
+  * previsto_para : DATE
+  devolvido_em : DATE <<NULL permitido>>
+  exemplar_ativo_id : INTEGER <<calculada, UNIQUE>>
 }
 leitor ||--o| carteirinha
 livro ||--o{ exemplar
@@ -57,13 +58,14 @@ exemplar ||--o{ emprestimo
 note bottom of emprestimo
   previsto_para >= realizado_em
   devolvido_em é NULL ou >= realizado_em
-  exemplar_id único entre empréstimos ativos
-  (devolvido_em IS NULL).
+  exemplar_ativo_id = CASE WHEN devolvido_em IS NULL
+  THEN exemplar_id ELSE NULL END
+  UNIQUE permite múltiplos NULLs no H2.
 end note
 legend bottom
   * = coluna obrigatória (NOT NULL)
   PK = chave primária; FK = chave estrangeira
   livro_autor tem UNIQUE(livro_id, autor_id).
-  Datas: texto ISO yyyy-MM-dd.
+  Datas: DATE. IDs gerados por IDENTITY.
 endlegend
 @enduml

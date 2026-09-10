@@ -1,15 +1,18 @@
 package br.edu.biblioteca;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-/** Entidade persistente: autor. Datas usam texto ISO yyyy-MM-dd. */
-@DatabaseTable(tableName = "autor")
+
+/** Entidade mapeada com Jakarta Persistence. */
+@Entity
+@Table(name = "autor")
 public class Autor {
-    @DatabaseField(generatedId = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @DatabaseField(canBeNull = false)
+    @Column(nullable = false)
     private String nome;
 
     public Autor() {}
