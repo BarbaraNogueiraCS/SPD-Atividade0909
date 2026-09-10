@@ -1,7 +1,6 @@
 package br.edu.biblioteca;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 
 /** Entidade mapeada com Jakarta Persistence. */
